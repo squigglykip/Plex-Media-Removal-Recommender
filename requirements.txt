@@ -1,0 +1,6 @@
+requests
+pandas
+tabulate
+plexapi
+scikit-learn
+python-dotenv
