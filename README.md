@@ -9,7 +9,7 @@ This script helps you identify and recommend media files (movies and TV shows) f
 3. **Age Calculation**: The script calculates the age of each media file in days from the date it was added to the library.
 4. **Filtering by IQR**: It filters the media files using the Interquartile Range (IQR) method to identify the lower quartile of media files based on play count, effective rating, and age.
 5. **Normalization**: The script normalizes the filtered data using MinMaxScaler to scale the values between 0 and 1. The play count and effective rating are inverted (1 - normalized value) to prioritize lower values.
-6. **Weighting and Scoring**: It calculates a removal score for each media file using a weighted sum of the normalized play count, effective rating, age, and file size. The default weights are 0.3 for play count, 0.3 for rating, 0.2 for age, and 0.2 for file size.
+6. **Weighting and Scoring**: It calculates a removal score for each media file using a weighted sum of the normalized play count, effective rating, age, and file size. The default weights are defined in `config.py`.
 7. **Recommendation**: Based on the removal score, the script categorizes the media files into three recommendation levels: Low, Medium, and High. These recommendations are then formatted into a table.
 8. **Notification**: Finally, the script sends the formatted recommendations to the specified Discord channel via a webhook.
 
@@ -46,6 +46,16 @@ This script helps you identify and recommend media files (movies and TV shows) f
     DISCORD_WEBHOOK_URL=Your Discord Webhook URL
     ```
 
+4. Configure the weightings in `config.py` to adjust the importance of each factor in the removal score calculation. Ensure the sum of all weights equals 1.0:
+    ```python
+    # config.py
+
+    PLAY_COUNT_WEIGHT = 0.3  # Weight for play count
+    RATING_WEIGHT = 0.3      # Weight for rating
+    AGE_WEIGHT = 0.2         # Weight for age
+    SIZE_WEIGHT = 0.2        # Weight for file size
+    ```
+
 ## Usage
 
 1. Run the script:
@@ -58,7 +68,7 @@ This script helps you identify and recommend media files (movies and TV shows) f
 
 - `get_media_data(server_info)`: Retrieves media data from the Plex server.
 - `filter_by_iqr(df, column)`: Filters data based on the Interquartile Range (IQR).
-- `calculate_removal_score(df, play_count_weight=0.3, rating_weight=0.3, age_weight=0.2, size_weight=0.2)`: Calculates the removal score for media files.
+- `calculate_removal_score(df)`: Calculates the removal score for media files using weights from `config.py`.
 - `format_table_for_discord(df, title)`: Formats the data into a table for Discord.
 - `send_discord_message(content)`: Sends a message to the specified Discord channel.
 - `animate_processing()`: Displays a processing animation in the console.
