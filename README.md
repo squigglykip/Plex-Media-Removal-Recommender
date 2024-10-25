@@ -1,10 +1,10 @@
 # Plex Media Removal Recommender
 
-This script helps you identify and recommend media files (movies and TV shows) for removal from your Plex server based on various criteria such as play count, rating, age, and file size. The recommendations are sent to a specified Discord channel via a webhook.
+This script helps you identify and recommend media files (movies and TV shows) for removal from your Plex servers based on various criteria such as play count, rating, age, and file size. The recommendations are sent to a specified Discord channel via a webhook.
 
 ## How It Works
 
-1. **Data Retrieval**: The script connects to your Plex server using the details provided in the `.env` file and retrieves media data (movies and TV shows) from your Plex library.
+1. **Data Retrieval**: The script connects to your Plex servers using the details provided in the `.env` file and retrieves media data (movies and TV shows) from your Plex libraries.
 2. **Data Aggregation**: It aggregates the media data, calculating the total play count, file size, and effective rating for each media file. The effective rating is determined by using the rating if available, otherwise, it uses the audience rating.
 3. **Age Calculation**: The script calculates the age of each media file in days from the date it was added to the library.
 4. **Filtering by IQR**: It filters the media files using the Interquartile Range (IQR) method to identify the lower quartile of media files based on play count, effective rating, and age.
@@ -16,7 +16,7 @@ This script helps you identify and recommend media files (movies and TV shows) f
 ## Requirements
 
 - Python 3.x
-- A Plex server
+- Plex servers
 - A Discord account with a webhook URL
 
 ## Setup
@@ -29,16 +29,17 @@ This script helps you identify and recommend media files (movies and TV shows) f
 3. Create a `.env` file in the root directory of the project with the following details:
 
     ```env
-    # The name of your Plex server. This is used for identification purposes.
-    PLEX_SERVER_NAME=Your Plex Server Name
+    # The names of your Plex servers. These are used for identification purposes.
+    # You can specify one or multiple server names, separated by commas.
+    PLEX_SERVER_NAMES=Your Plex Server Name 1,Your Plex Server Name 2
 
-    # The base URL of your Plex server. This should include the protocol (http/https) and the port number.
-    # Example: http://your-plex-server-ip:32400
-    PLEX_SERVER_BASEURL=http://your-plex-server-ip:32400
+    # The base URLs of your Plex servers. Include the protocol (http/https) and the port number.
+    # You can specify one or multiple URLs, separated by commas. Example: http://your-plex-server-ip:32400
+    PLEX_SERVER_BASEURLS=http://your-plex-server-ip-1:32400,http://your-plex-server-ip-2:32400
 
-    # The authentication token for accessing your Plex server. This token is required to interact with the Plex API.
-    # You can obtain this token from your Plex account settings.
-    PLEX_SERVER_TOKEN=Your Plex Token
+    # The authentication tokens for accessing your Plex servers. These tokens are required to interact with the Plex API.
+    # You can specify one or multiple tokens, separated by commas. Obtain these tokens from your Plex account settings.
+    PLEX_SERVER_TOKENS=Your Plex Token 1,Your Plex Token 2
 
     # The Discord webhook URL where the removal recommendations will be sent.
     # You can create a webhook in your Discord server settings and paste the URL here.
@@ -52,13 +53,6 @@ This script helps you identify and recommend media files (movies and TV shows) f
     python PlexMediaRemovalRecommender.py
     ```
 2. The script will start processing your media files and send the removal recommendations to the specified Discord channel.
-
-## How It Works
-
-1. The script connects to your Plex server using the details provided in the `.env` file.
-2. It retrieves media data (movies and TV shows) from your Plex library.
-3. It calculates a removal score for each media file based on play count, rating, age, and file size.
-4. It formats the recommendations and sends them to the specified Discord channel via a webhook.
 
 ## Functions
 
