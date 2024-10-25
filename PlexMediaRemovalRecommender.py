@@ -8,6 +8,7 @@ from datetime import datetime
 from plexapi.server import PlexServer
 from sklearn.preprocessing import MinMaxScaler
 from dotenv import load_dotenv
+from config import PLAY_COUNT_WEIGHT, RATING_WEIGHT, AGE_WEIGHT, SIZE_WEIGHT
 
 # Load environment variables from .env file
 load_dotenv()
@@ -66,7 +67,7 @@ def filter_by_iqr(df, column):
     IQR = Q3 - Q1
     return df[df[column] <= Q1]
 
-def calculate_removal_score(df, play_count_weight=0.3, rating_weight=0.3, age_weight=0.2, size_weight=0.2):
+def calculate_removal_score(df):
     required_columns = ['Play Count', 'Effective Rating', 'Age in Days', 'File Size']
     if not all(column in df.columns for column in required_columns):
         raise ValueError(f"DataFrame must contain the following columns: {', '.join(required_columns)}")
@@ -92,10 +93,10 @@ def calculate_removal_score(df, play_count_weight=0.3, rating_weight=0.3, age_we
     df.loc[:, 'Normalized File Size'] = scaler.fit_transform(df[['IQR File Size']])
 
     df.loc[:, 'Removal Score'] = (
-        play_count_weight * df['Normalized Play Count'] +
-        rating_weight * df['Normalized Effective Rating'] +
-        age_weight * df['Normalized Age in Days'] +
-        size_weight * df['Normalized File Size']
+        PLAY_COUNT_WEIGHT * df['Normalized Play Count'] +
+        RATING_WEIGHT * df['Normalized Effective Rating'] +
+        AGE_WEIGHT * df['Normalized Age in Days'] +
+        SIZE_WEIGHT * df['Normalized File Size']
     )
 
     df.loc[:, 'Removal Recommendation'] = pd.cut(
